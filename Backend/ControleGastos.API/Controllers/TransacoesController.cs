@@ -8,14 +8,13 @@ namespace ControleGastos.API.Controllers
     [Route("api/[controller]")]
     public class TransacoesController(ITransacaoService transacaoService) : ControllerBase
     {
-        private readonly ITransacaoService _transacaoService = transacaoService;
 
 
         // Endpoint responsável por criar uma nova transação
         [HttpPost]
         public async Task<ActionResult<TransacaoResponse>> Criar(TransacaoRequest request)
         {
-            var transacao = await _transacaoService.CriarAsync(request);
+            var transacao = await transacaoService.CriarAsync(request);
 
             return CreatedAtAction(
                 nameof(BuscarPorId),
@@ -29,7 +28,7 @@ namespace ControleGastos.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TransacaoResponse>>> BuscarTodas()
         {
-            var transacoes = await _transacaoService.BuscarTodasAsync();
+            var transacoes = await transacaoService.BuscarTodasAsync();
 
             return Ok(transacoes);
         }
@@ -39,7 +38,7 @@ namespace ControleGastos.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TransacaoResponse>> BuscarPorId(Guid id)
         {
-            var transacao = await _transacaoService.BuscarPorIdAsync(id);
+            var transacao = await transacaoService.BuscarPorIdAsync(id);
 
             if (transacao is null)
                 return NotFound();
@@ -52,7 +51,7 @@ namespace ControleGastos.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remover(Guid id)
         {
-            var removido = await _transacaoService.RemoverAsync(id);
+            var removido = await transacaoService.RemoverAsync(id);
 
             if (!removido)
                 return NotFound();

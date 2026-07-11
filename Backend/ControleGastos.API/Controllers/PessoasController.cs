@@ -8,13 +8,12 @@ namespace ControleGastos.API.Controllers
     [Route("api/[controller]")]
     public class PessoasController(IPessoaService pessoaService) : ControllerBase
     {
-        private readonly IPessoaService _pessoaService = pessoaService;
 
         // Método post pra criar uma pessoa
         [HttpPost]
         public async Task<ActionResult<PessoaResponse>> Criar(PessoaRequest request)
         {
-            var pessoa = await _pessoaService.CriarAsync(request);
+            var pessoa = await pessoaService.CriarAsync(request);
 
             return CreatedAtAction(
                 nameof(BuscarPorId),
@@ -27,7 +26,7 @@ namespace ControleGastos.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<PessoaResponse>> BuscarPorId(Guid id)
         {
-            var pessoa = await _pessoaService.BuscarPorIdAsync(id);
+            var pessoa = await pessoaService.BuscarPorIdAsync(id);
 
             if (pessoa is null)
                 return NotFound();
@@ -39,7 +38,7 @@ namespace ControleGastos.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PessoaResponse>>> BuscarTodas()
         {
-            var pessoas = await _pessoaService.BuscarTodasAsync();
+            var pessoas = await pessoaService.BuscarTodasAsync();
 
             return Ok(pessoas);
         }
