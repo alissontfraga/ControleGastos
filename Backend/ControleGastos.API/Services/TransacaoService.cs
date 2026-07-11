@@ -14,6 +14,12 @@ namespace ControleGastos.API.Services
         // Método responsável por criar uma nova transação
         public async Task<TransacaoResponse> CriarAsync(TransacaoRequest request)
         {
+            // Valida se o iID da pessoa foi informado
+            if (request.PessoaId == Guid.Empty)
+            {
+                throw new BusinessException("O identificador da pessoa é obrigatório.");
+            }
+
             var pessoa = await context.Pessoas
                 .FirstOrDefaultAsync(p => p.Id == request.PessoaId)
                 ?? throw new NotFoundException("Pessoa não encontrada.");
