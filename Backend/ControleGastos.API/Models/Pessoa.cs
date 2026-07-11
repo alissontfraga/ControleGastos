@@ -4,7 +4,8 @@ namespace ControleGastos.API.Models
 {
     public class Pessoa
     {
-      public Guid Id { get; set; }
+      //gera um Id Global aleatóro
+      public Guid Id { get; set; } = Guid.NewGuid();
 
       [Required]
       [MaxLength(80)]
@@ -13,7 +14,7 @@ namespace ControleGastos.API.Models
       [Required]
       [Range(0,110)]
       public int Idade { get; set; }
-
+  
       public ICollection<Transacao> Transacoes { get; set; } = new List<Transacao>();
       
     }

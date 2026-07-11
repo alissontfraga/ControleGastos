@@ -5,7 +5,7 @@ namespace ControleGastos.API.Models
 {
     public class Transacao
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [MaxLength(250)]
         public string Descricao { get; set; } = string.Empty;
