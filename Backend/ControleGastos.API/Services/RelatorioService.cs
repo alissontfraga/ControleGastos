@@ -8,26 +8,41 @@ namespace ControleGastos.API.Services
 {
     public class RelatorioService(AppDbContext context) : IRelatorioService
     {
-        // Método responsável por calcular o resumo dos gastos
-        public async Task<ResumoGastosResponse> ObterResumoAsync()
+        // Método responsável por retornar o resumo geral dos gastos
+        public async Task<ResumoGeralResponse> ObterResumoAsync()
         {
-            var transacoes = await context.Transacoes
+            var pessoas = await context.Pessoas
+                .Include(p => p.Transacoes)
                 .ToListAsync();
 
-            var totalReceitas = transacoes
-                .Where(t => t.Tipo == TipoTransacao.Receita)
-                .Sum(t => t.Valor);
+            var resumoPessoas = pessoas.Select(p =>
+            {
+                var totalReceitas = p.Transacoes
+                    .Where(t => t.Tipo == TipoTransacao.Receita)
+                    .Sum(t => t.Valor);
 
-            var totalDespesas = transacoes
-                .Where(t => t.Tipo == TipoTransacao.Despesa)
-                .Sum(t => t.Valor);
+                var totalDespesas = p.Transacoes
+                    .Where(t => t.Tipo == TipoTransacao.Despesa)
+                    .Sum(t => t.Valor);
 
-            var saldo = totalReceitas - totalDespesas;
+                return new ResumoPessoaResponse(
+                    p.Id,
+                    p.Nome,
+                    totalReceitas,
+                    totalDespesas,
+                    totalReceitas - totalDespesas
+                );
+            }).ToList();
 
-            return new ResumoGastosResponse(
-                totalReceitas,
-                totalDespesas,
-                saldo
+            var totalReceitasGeral = resumoPessoas.Sum(p => p.TotalReceitas);
+
+            var totalDespesasGeral = resumoPessoas.Sum(p => p.TotalDespesas);
+
+            return new ResumoGeralResponse(
+                resumoPessoas,
+                totalReceitasGeral,
+                totalDespesasGeral,
+                totalReceitasGeral - totalDespesasGeral
             );
         }
     }

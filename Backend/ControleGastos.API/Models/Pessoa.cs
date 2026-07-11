@@ -15,7 +15,7 @@ namespace ControleGastos.API.Models
       [Range(0,110)]
       public int Idade { get; set; }
   
-      public ICollection<Transacao> Transacoes { get; set; } = new List<Transacao>();
+      public ICollection<Transacao> Transacoes { get; set; } = [];
       
     }
 }

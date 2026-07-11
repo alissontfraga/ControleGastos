@@ -11,7 +11,8 @@ namespace ControleGastos.API.Controllers
 
         // Endpoint responsável por retornar o resumo dos gastos
         [HttpGet("resumo")]
-        public async Task<ActionResult<ResumoGastosResponse>> ObterResumo()
+        [ProducesResponseType(typeof(ResumoGeralResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult<ResumoGeralResponse>> ObterResumo()
         {
             var resumo = await relatorioService.ObterResumoAsync();
 
