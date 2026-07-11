@@ -1,20 +1,14 @@
 using ControleGastos.API.Data;
 using ControleGastos.API.DTOs.Pessoas;
+using ControleGastos.API.Exceptions;
 using ControleGastos.API.Models;
 using ControleGastos.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace ControleGastos.API.Services
 {
-    public class PessoaService : IPessoaService
+    public class PessoaService(AppDbContext context) : IPessoaService
     {
-        private readonly AppDbContext _context;
-
-        public PessoaService(AppDbContext context)
-        {
-            _context = context;
-        }
-
         // Método responsável por criar uma nova pessoa
         public async Task<PessoaResponse> CriarAsync(PessoaRequest request)
         {
@@ -24,9 +18,9 @@ namespace ControleGastos.API.Services
                 Idade = request.Idade
             };
 
-            await _context.Pessoas.AddAsync(pessoa);
+            await context.Pessoas.AddAsync(pessoa);
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return new PessoaResponse(
                 pessoa.Id,
@@ -38,7 +32,7 @@ namespace ControleGastos.API.Services
         // Método responsável por buscar todas as pessoas cadastradas
         public async Task<IEnumerable<PessoaResponse>> BuscarTodasAsync()
         {
-            var pessoas = await _context.Pessoas
+            var pessoas = await context.Pessoas
             .ToListAsync();
 
             return pessoas.Select(p => new PessoaResponse(
@@ -51,11 +45,8 @@ namespace ControleGastos.API.Services
         // Método responsável por buscar uma pessoa pelo ID
         public async Task<PessoaResponse?> BuscarPorIdAsync(Guid id)
         {
-            var pessoa = await _context.Pessoas
-                .FirstOrDefaultAsync(p => p.Id == id);
-
-            if (pessoa is null)
-                return null;
+            var pessoa = await context.Pessoas
+                .FirstOrDefaultAsync(p => p.Id == id) ?? throw new NotFoundException("Pessoa não encontrada");
 
             return new PessoaResponse(
                 pessoa.Id,
@@ -67,15 +58,12 @@ namespace ControleGastos.API.Services
         // Método responsável por excluir uma pessoa pelo ID
         public async Task<bool> RemoverAsync(Guid id)
         {
-            var pessoa = await _context.Pessoas
-                .FirstOrDefaultAsync(p => p.Id == id);
+            var pessoa = await context.Pessoas
+                .FirstOrDefaultAsync(p => p.Id == id) ?? throw new NotFoundException("Pessoa não encontrada.");
+                
+            context.Pessoas.Remove(pessoa);
 
-            if (pessoa is null)
-                return false;
-
-            _context.Pessoas.Remove(pessoa);
-
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return true;
         }

@@ -1,5 +1,6 @@
 using ControleGastos.API.Data;
 using ControleGastos.API.DTOs.Transacoes;
+using ControleGastos.API.Exceptions;
 using ControleGastos.API.Models;
 using ControleGastos.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -8,16 +9,15 @@ namespace ControleGastos.API.Services
 {
     public class TransacaoService(AppDbContext context) : ITransacaoService
     {
-        private readonly AppDbContext _context = context;
 
         // Método responsável por criar uma nova transação
         public async Task<TransacaoResponse> CriarAsync(TransacaoRequest request)
         {
-            var pessoaExiste = await _context.Pessoas
+            var pessoaExiste = await context.Pessoas
                 .AnyAsync(p => p.Id == request.PessoaId);
 
             if (!pessoaExiste)
-                throw new Exception("Pessoa não encontrada.");
+                throw new NotFoundException("Pessoa não encontrada.");
 
             var transacao = new Transacao
             {
@@ -28,9 +28,9 @@ namespace ControleGastos.API.Services
                 PessoaId = request.PessoaId
             };
 
-            await _context.Transacoes.AddAsync(transacao);
+            await context.Transacoes.AddAsync(transacao);
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return new TransacaoResponse(
                 transacao.Id,
@@ -44,7 +44,7 @@ namespace ControleGastos.API.Services
         // Método responsável por buscar todas as transações
         public async Task<IEnumerable<TransacaoResponse>> BuscarTodasAsync()
         {
-            var transacoes = await _context.Transacoes
+            var transacoes = await context.Transacoes
                 .ToListAsync();
 
             return transacoes.Select(t => new TransacaoResponse(
@@ -59,11 +59,8 @@ namespace ControleGastos.API.Services
         // Método responsável por buscar uma transação por ID
         public async Task<TransacaoResponse?> BuscarPorIdAsync(Guid id)
         {
-            var transacao = await _context.Transacoes
-                .FirstOrDefaultAsync(t => t.Id == id);
-
-            if (transacao is null)
-                return null;
+            var transacao = await context.Transacoes
+                .FirstOrDefaultAsync(t => t.Id == id) ?? throw new NotFoundException("Transação não encontrada");
 
             return new TransacaoResponse(
                 transacao.Id,
@@ -77,15 +74,15 @@ namespace ControleGastos.API.Services
         // Método responsável por remover uma transação por ID
         public async Task<bool> RemoverAsync(Guid id)
         {
-            var transacao = await _context.Transacoes
+            var transacao = await context.Transacoes
                 .FirstOrDefaultAsync(t => t.Id == id);
 
             if (transacao is null)
                 return false;
 
-            _context.Transacoes.Remove(transacao);
+            context.Transacoes.Remove(transacao);
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return true;
         }

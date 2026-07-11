@@ -8,12 +8,10 @@ namespace ControleGastos.API.Services
 {
     public class RelatorioService(AppDbContext context) : IRelatorioService
     {
-        private readonly AppDbContext _context = context;
-
         // Método responsável por calcular o resumo dos gastos
         public async Task<ResumoGastosResponse> ObterResumoAsync()
         {
-            var transacoes = await _context.Transacoes
+            var transacoes = await context.Transacoes
                 .ToListAsync();
 
             var totalReceitas = transacoes

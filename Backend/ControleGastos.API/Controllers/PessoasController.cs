@@ -28,9 +28,6 @@ namespace ControleGastos.API.Controllers
         {
             var pessoa = await pessoaService.BuscarPorIdAsync(id);
 
-            if (pessoa is null)
-                return NotFound();
-
             return Ok(pessoa);
         }
 

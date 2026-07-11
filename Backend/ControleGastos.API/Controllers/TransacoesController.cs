@@ -40,9 +40,6 @@ namespace ControleGastos.API.Controllers
         {
             var transacao = await transacaoService.BuscarPorIdAsync(id);
 
-            if (transacao is null)
-                return NotFound();
-
             return Ok(transacao);
         }
 
