@@ -1,5 +1,6 @@
 using ControleGastos.API.Data;
 using ControleGastos.API.DTOs.Transacoes;
+using ControleGastos.API.Enums;
 using ControleGastos.API.Exceptions;
 using ControleGastos.API.Models;
 using ControleGastos.API.Services.Interfaces;
@@ -13,11 +14,15 @@ namespace ControleGastos.API.Services
         // Método responsável por criar uma nova transação
         public async Task<TransacaoResponse> CriarAsync(TransacaoRequest request)
         {
-            var pessoaExiste = await context.Pessoas
-                .AnyAsync(p => p.Id == request.PessoaId);
+            var pessoa = await context.Pessoas
+                .FirstOrDefaultAsync(p => p.Id == request.PessoaId)
+                ?? throw new NotFoundException("Pessoa não encontrada.");
 
-            if (!pessoaExiste)
-                throw new NotFoundException("Pessoa não encontrada.");
+            if (pessoa.Idade < 18 && request.Tipo == TipoTransacao.Receita)
+            {
+                throw new BusinessException(
+                "Pessoas menores de idade podem cadastrar apenas despesas.");
+            }
 
             var transacao = new Transacao
             {

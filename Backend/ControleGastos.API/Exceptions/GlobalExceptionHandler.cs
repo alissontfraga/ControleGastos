@@ -3,22 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ControleGastos.API.Exceptions
 {
-    public class GlobalExceptionHandler : IExceptionHandler
+    public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
     {
-        private readonly ILogger<GlobalExceptionHandler> _logger;
-
-        public GlobalExceptionHandler(
-            ILogger<GlobalExceptionHandler> logger)
-        {
-            _logger = logger;
-        }
 
         public async ValueTask<bool> TryHandleAsync(
             HttpContext httpContext,
             Exception exception,
             CancellationToken cancellationToken)
         {
-            _logger.LogError(exception, exception.Message);
+            logger.LogError(exception, exception.Message);
 
             var response = new ProblemDetails();
 
@@ -30,6 +23,15 @@ namespace ControleGastos.API.Exceptions
                     response.Title = "Recurso não encontrado.";
                     response.Detail = exception.Message;
                     response.Status = 404;
+
+                    break;
+
+                case BusinessException:
+                    httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+                    response.Title = "Regra de negócio violada.";
+                    response.Detail = exception.Message;
+                    response.Status = 400;
 
                     break;
 
