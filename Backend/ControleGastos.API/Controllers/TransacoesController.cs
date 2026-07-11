@@ -40,9 +40,6 @@ namespace ControleGastos.API.Controllers
         {
             var transacao = await transacaoService.BuscarPorIdAsync(id);
 
-            if (transacao is null)
-                return NotFound();
-
             return Ok(transacao);
         }
 
@@ -51,10 +48,8 @@ namespace ControleGastos.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remover(Guid id)
         {
-            var removido = await transacaoService.RemoverAsync(id);
-
-            if (!removido)
-                return NotFound();
+        
+            await transacaoService.RemoverAsync(id);
 
             return NoContent();
         }

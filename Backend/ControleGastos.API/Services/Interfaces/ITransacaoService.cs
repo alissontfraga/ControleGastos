@@ -15,9 +15,9 @@ namespace ControleGastos.API.Services.Interfaces
     Task<IEnumerable<TransacaoResponse>> BuscarTodasAsync();
 
     // Método responsável por buscar uma transação por ID
-    Task<TransacaoResponse?> BuscarPorIdAsync(Guid id);
+    Task<TransacaoResponse> BuscarPorIdAsync(Guid id);
 
     // Método responsável por remover uma transação por ID
-    Task<bool> RemoverAsync(Guid id);
+    Task RemoverAsync(Guid id);
     }
 }

@@ -13,9 +13,9 @@ namespace ControleGastos.API.Services.Interfaces
         Task<IEnumerable<PessoaResponse>> BuscarTodasAsync();
 
         // Método de busca de pessoa por ID
-        Task<PessoaResponse?> BuscarPorIdAsync(Guid id);
+        Task<PessoaResponse> BuscarPorIdAsync(Guid id);
 
         // Método de exclusão de pessoa
-        Task<bool> RemoverAsync(Guid id);
+        Task RemoverAsync(Guid id);
     }
 }

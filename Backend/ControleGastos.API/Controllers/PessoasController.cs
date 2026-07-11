@@ -9,7 +9,7 @@ namespace ControleGastos.API.Controllers
     public class PessoasController(IPessoaService pessoaService) : ControllerBase
     {
 
-        // Método post pra criar uma pessoa
+        // Endpoint responsável por criar uma nova pessoa
         [HttpPost]
         public async Task<ActionResult<PessoaResponse>> Criar(PessoaRequest request)
         {
@@ -22,19 +22,16 @@ namespace ControleGastos.API.Controllers
             );
         }
 
-        // Método get pra buscar uma pessoa por Id
+        // Endpoint responsável por buscar uma pessoa pelo ID
         [HttpGet("{id}")]
         public async Task<ActionResult<PessoaResponse>> BuscarPorId(Guid id)
         {
             var pessoa = await pessoaService.BuscarPorIdAsync(id);
 
-            if (pessoa is null)
-                return NotFound();
-
             return Ok(pessoa);
         }
 
-        // Método get pra buscar todas as pessoas
+        // Endpoint responsável por buscar todas as pessoas
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PessoaResponse>>> BuscarTodas()
         {
@@ -43,15 +40,13 @@ namespace ControleGastos.API.Controllers
             return Ok(pessoas);
         }
 
-        // Método delete pra excluir uma pessoa por ID
+        // Endpoint responsável por remover uma pessoa pelo ID
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remover(Guid id)
         {
-            var removido = await pessoaService.RemoverAsync(id);
-
-            if (!removido)
-                return NotFound();
-
+           
+           await pessoaService.RemoverAsync(id); 
+           
             return NoContent();
         }
 
