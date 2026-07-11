@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 using ControleGastos.API.Enums;
 
 namespace ControleGastos.API.Models
@@ -10,8 +7,10 @@ namespace ControleGastos.API.Models
     {
         public Guid Id { get; set; }
 
+        [MaxLength(250)]
         public string Descricao { get; set; } = string.Empty;
 
+        [Range(0.01, double.MaxValue)]
         public decimal Valor { get; set; }
 
         public TipoTransacao Tipo { get; set; }
