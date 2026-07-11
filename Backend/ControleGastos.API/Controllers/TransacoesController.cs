@@ -12,6 +12,9 @@ namespace ControleGastos.API.Controllers
 
         // Endpoint responsável por criar uma nova transação
         [HttpPost]
+        [ProducesResponseType(typeof(TransacaoResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TransacaoResponse>> Criar(TransacaoRequest request)
         {
             var transacao = await transacaoService.CriarAsync(request);
@@ -26,6 +29,7 @@ namespace ControleGastos.API.Controllers
 
         // Endpoint responsável por buscar todas as transações
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<TransacaoResponse>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<TransacaoResponse>>> BuscarTodas()
         {
             var transacoes = await transacaoService.BuscarTodasAsync();
@@ -36,6 +40,8 @@ namespace ControleGastos.API.Controllers
 
         // Endpoint responsável por buscar uma transação por ID
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(TransacaoResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TransacaoResponse>> BuscarPorId(Guid id)
         {
             var transacao = await transacaoService.BuscarPorIdAsync(id);
@@ -46,6 +52,8 @@ namespace ControleGastos.API.Controllers
 
         // Endpoint responsável por remover uma transação por ID
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Remover(Guid id)
         {
         

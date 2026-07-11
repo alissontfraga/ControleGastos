@@ -11,6 +11,8 @@ namespace ControleGastos.API.Controllers
 
         // Endpoint responsável por criar uma nova pessoa
         [HttpPost]
+        [ProducesResponseType(typeof(PessoaResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PessoaResponse>> Criar(PessoaRequest request)
         {
             var pessoa = await pessoaService.CriarAsync(request);
@@ -24,6 +26,8 @@ namespace ControleGastos.API.Controllers
 
         // Endpoint responsável por buscar uma pessoa pelo ID
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(PessoaResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<PessoaResponse>> BuscarPorId(Guid id)
         {
             var pessoa = await pessoaService.BuscarPorIdAsync(id);
@@ -33,6 +37,7 @@ namespace ControleGastos.API.Controllers
 
         // Endpoint responsável por buscar todas as pessoas
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<PessoaResponse>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<PessoaResponse>>> BuscarTodas()
         {
             var pessoas = await pessoaService.BuscarTodasAsync();
@@ -42,6 +47,8 @@ namespace ControleGastos.API.Controllers
 
         // Endpoint responsável por remover uma pessoa pelo ID
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Remover(Guid id)
         {
            
