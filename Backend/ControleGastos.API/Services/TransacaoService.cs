@@ -20,6 +20,14 @@ namespace ControleGastos.API.Services
                 throw new BusinessException("O identificador da pessoa é obrigatório.");
             }
 
+            // Valida se o Valor é maior que zero.
+            if (request.Valor <= 0)
+            {
+                throw new BusinessException(
+                    "O valor deve ser maior que zero."
+                );
+            }
+
             // Busca a pessoa vinculada à transação.
             // Caso não exista, interrompe o cadastro.
             var pessoa = await context.Pessoas

@@ -11,7 +11,7 @@ namespace ControleGastos.API.DTOs.Transacoes
         [MaxLength(250, ErrorMessage = "A descrição deve ter no máximo 250 caracteres.")]
         string Descricao,
 
-        [Range(typeof(decimal), "0.01", "999999999", ErrorMessage = "O valor deve ser maior que zero.")]
+        [Required(ErrorMessage = "O valor é obrigatório.")]
         decimal Valor,
 
         [Required(ErrorMessage = "O tipo da transação é obrigatório.")]
