@@ -9,7 +9,9 @@ namespace ControleGastos.API.Controllers
     public class RelatoriosController(IRelatorioService relatorioService) : ControllerBase
     {
 
-        // Endpoint responsável por retornar o resumo dos gastos
+    //    Endpoint responsável por retornar o resumo financeiro,
+    //     contendo receitas, despesas e saldo de cada pessoa,
+    //     além dos totais gerais. 
         [HttpGet("resumo")]
         [ProducesResponseType(typeof(ResumoGeralResponse), StatusCodes.Status200OK)]
         public async Task<ActionResult<ResumoGeralResponse>> ObterResumo()

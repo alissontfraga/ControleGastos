@@ -11,25 +11,30 @@ namespace ControleGastos.API.Services
     public class TransacaoService(AppDbContext context) : ITransacaoService
     {
 
-        // Método responsável por criar uma nova transação
+        // Método responsável por criar uma nova transação.
         public async Task<TransacaoResponse> CriarAsync(TransacaoRequest request)
         {
-            // Valida se o iID da pessoa foi informado
+            // Valida se o ID da pessoa foi informado.
             if (request.PessoaId == Guid.Empty)
             {
                 throw new BusinessException("O identificador da pessoa é obrigatório.");
             }
 
+            // Busca a pessoa vinculada à transação.
+            // Caso não exista, interrompe o cadastro.
             var pessoa = await context.Pessoas
                 .FirstOrDefaultAsync(p => p.Id == request.PessoaId)
                 ?? throw new NotFoundException("Pessoa não encontrada.");
 
+            // Regra de negócio: menores de idade podem cadastrar apenas despesas.
             if (pessoa.Idade < 18 && request.Tipo == TipoTransacao.Receita)
             {
                 throw new BusinessException(
-                "Pessoas menores de idade podem cadastrar apenas despesas.");
+                    "Pessoas menores de idade podem cadastrar apenas despesas.");
             }
 
+            // Cria a entidade de transação associando os dados recebidos
+            // com a pessoa previamente validada.
             var transacao = new Transacao
             {
                 Id = Guid.NewGuid(),
@@ -52,10 +57,12 @@ namespace ControleGastos.API.Services
             );
         }
 
-        // Método responsável por buscar todas as transações
+
+        // Método responsável por buscar todas as transações cadastradas.
         public async Task<IEnumerable<TransacaoResponse>> BuscarTodasAsync()
         {
             var transacoes = await context.Transacoes
+                .AsNoTracking()
                 .ToListAsync();
 
             return transacoes.Select(t => new TransacaoResponse(
@@ -67,11 +74,15 @@ namespace ControleGastos.API.Services
             ));
         }
 
-        // Método responsável por buscar uma transação por ID
+
+        // Busca uma transação pelo ID informado.
+        // Caso não exista, dispara uma exceção de recurso não encontrado.
         public async Task<TransacaoResponse> BuscarPorIdAsync(Guid id)
         {
             var transacao = await context.Transacoes
-                .FirstOrDefaultAsync(t => t.Id == id) ?? throw new NotFoundException("Transação não encontrada.");
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Id == id)
+                ?? throw new NotFoundException("Transação não encontrada.");
 
             return new TransacaoResponse(
                 transacao.Id,
@@ -82,11 +93,14 @@ namespace ControleGastos.API.Services
             );
         }
 
-        // Método responsável por remover uma transação por ID
+
+        // Remove uma transação pelo ID informado.
+        // Caso não exista, dispara uma exceção de recurso não encontrado.
         public async Task RemoverAsync(Guid id)
         {
             var transacao = await context.Transacoes
-                .FirstOrDefaultAsync(t => t.Id == id) ?? throw new NotFoundException("Transação não encontrada.");
+                .FirstOrDefaultAsync(t => t.Id == id)
+                ?? throw new NotFoundException("Transação não encontrada.");
 
             context.Transacoes.Remove(transacao);
 

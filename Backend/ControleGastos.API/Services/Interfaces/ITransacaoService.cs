@@ -1,23 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ControleGastos.API.DTOs.Transacoes;
 
 namespace ControleGastos.API.Services.Interfaces
 {
+    // Contrato que define as operações disponíveis
+    // para gerenciamento de transações.
     public interface ITransacaoService
     {
-    // Método responsável por criar uma nova transação
-    Task<TransacaoResponse> CriarAsync(TransacaoRequest request);
+        // Cria uma nova transação.
+        // A implementação deve validar a existência da pessoa
+        // e aplicar as regras de negócio relacionadas.
+        Task<TransacaoResponse> CriarAsync(TransacaoRequest request);
 
-    // Método responsável por buscar todas as transações
-    Task<IEnumerable<TransacaoResponse>> BuscarTodasAsync();
+        // Retorna todas as transações cadastradas.
+        Task<IEnumerable<TransacaoResponse>> BuscarTodasAsync();
 
-    // Método responsável por buscar uma transação por ID
-    Task<TransacaoResponse> BuscarPorIdAsync(Guid id);
+        // Busca uma transação pelo ID informado.
+        // Caso não exista, a implementação deve tratar o recurso não encontrado.
+        Task<TransacaoResponse> BuscarPorIdAsync(Guid id);
 
-    // Método responsável por remover uma transação por ID
-    Task RemoverAsync(Guid id);
+        // Remove uma transação pelo ID informado.
+        Task RemoverAsync(Guid id);
     }
 }

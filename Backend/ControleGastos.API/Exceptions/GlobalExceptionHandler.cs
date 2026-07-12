@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ControleGastos.API.Exceptions
 {
-    public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
+    // Handler global responsável por capturar exceções da aplicação
+    // e retornar respostas HTTP padronizadas para a API.
+    public class GlobalExceptionHandler(
+        ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
     {
 
         public async ValueTask<bool> TryHandleAsync(
@@ -11,12 +14,14 @@ namespace ControleGastos.API.Exceptions
             Exception exception,
             CancellationToken cancellationToken)
         {
+            // Registra a exceção para facilitar o diagnóstico de erros.
             logger.LogError(exception, exception.Message);
 
             var response = new ProblemDetails();
 
             switch (exception)
             {
+                // Recurso solicitado não foi encontrado.
                 case NotFoundException:
                     httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
 
@@ -26,6 +31,8 @@ namespace ControleGastos.API.Exceptions
 
                     break;
 
+
+                // Erro causado por uma regra de negócio da aplicação.
                 case BusinessException:
                     httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
 
@@ -35,6 +42,8 @@ namespace ControleGastos.API.Exceptions
 
                     break;
 
+
+                // Trata erros inesperados que não possuem tratamento específico.
                 default:
                     httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
 

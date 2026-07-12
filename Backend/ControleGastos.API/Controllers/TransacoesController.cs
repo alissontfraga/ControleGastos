@@ -8,14 +8,16 @@ namespace ControleGastos.API.Controllers
     [Route("api/[controller]")]
     public class TransacoesController(ITransacaoService transacaoService) : ControllerBase
     {
-
-
-        // Endpoint responsável por criar uma nova transação
+ 
+    //    Endpoint responsável por criar uma nova transação.
+    //    Valida se a pessoa existe e aplica regras de negócio,
+    //    como impedir receitas para menores de idade.
         [HttpPost]
         [ProducesResponseType(typeof(TransacaoResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TransacaoResponse>> Criar(TransacaoRequest request)
+        public async Task<ActionResult<TransacaoResponse>> Criar(
+            [FromBody] TransacaoRequest request)
         {
             var transacao = await transacaoService.CriarAsync(request);
 
@@ -27,7 +29,7 @@ namespace ControleGastos.API.Controllers
         }
 
 
-        // Endpoint responsável por buscar todas as transações
+        // Endpoint responsável por buscar todas as transações.
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<TransacaoResponse>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<TransacaoResponse>>> BuscarTodas()
@@ -38,7 +40,7 @@ namespace ControleGastos.API.Controllers
         }
 
 
-        // Endpoint responsável por buscar uma transação por ID
+        // Endpoint responsável por buscar uma transação pelo ID.
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(TransacaoResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -50,7 +52,7 @@ namespace ControleGastos.API.Controllers
         }
 
 
-        // Endpoint responsável por remover uma transação por ID
+        // Endpoint responsável por remover uma transação pelo ID.
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

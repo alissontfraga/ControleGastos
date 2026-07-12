@@ -2,20 +2,22 @@ using ControleGastos.API.DTOs.Pessoas;
 
 namespace ControleGastos.API.Services.Interfaces
 {
-    // Contrato dos serviços relacionados a Pessoa
+    // Contrato que define as operações disponíveis
+    // para gerenciamento de pessoas.
     public interface IPessoaService
     {
-
-        // Método de criação de pessoa
+        // Cria uma nova pessoa a partir dos dados recebidos.
         Task<PessoaResponse> CriarAsync(PessoaRequest request);
 
-        //Método de busca de todas as pessoas
+        // Retorna todas as pessoas cadastradas.
         Task<IEnumerable<PessoaResponse>> BuscarTodasAsync();
 
-        // Método de busca de pessoa por ID
+        // Busca uma pessoa pelo ID informado.
+        // Caso não exista, a implementação deve tratar o recurso não encontrado.
         Task<PessoaResponse> BuscarPorIdAsync(Guid id);
 
-        // Método de exclusão de pessoa
+        // Remove uma pessoa pelo ID informado.
+        // A implementação também deve remover suas transações relacionadas.
         Task RemoverAsync(Guid id);
     }
 }
