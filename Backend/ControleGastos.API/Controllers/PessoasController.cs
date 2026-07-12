@@ -46,7 +46,8 @@ namespace ControleGastos.API.Controllers
         }
 
         // Endpoint responsável por remover uma pessoa pelo ID.
-        // A exclusão também remove automaticamente suas transações relacionadas. 
+        // A exclusão também remove automaticamente suas transações relacionadas
+        // devido à configuração de exclusão em cascata no Entity Framework.
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
