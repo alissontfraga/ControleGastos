@@ -63,6 +63,9 @@ Consulta contendo:
 
 ---
 
+# Diagrama de Arquitetura
+<img src="arquitetura.png" width="700"/>  
+
 # Estrutura do projeto
 
 ```text
