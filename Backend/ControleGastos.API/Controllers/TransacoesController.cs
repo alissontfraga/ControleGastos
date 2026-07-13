@@ -9,9 +9,9 @@ namespace ControleGastos.API.Controllers
     public class TransacoesController(ITransacaoService transacaoService) : ControllerBase
     {
 
-        //    Endpoint responsável por criar uma nova transação.
-        //    Valida se a pessoa existe e aplica regras de negócio,
-        //    como impedir receitas para menores de idade.
+        // Endpoint responsável por criar uma nova transação.
+        // Valida se a pessoa existe e aplica regras de negócio,
+        // como impedir receitas para menores de idade.
         [HttpPost]
         [ProducesResponseType(typeof(TransacaoResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
