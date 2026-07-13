@@ -33,8 +33,7 @@ namespace ControleGastos.API.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("character varying(80)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -49,8 +48,7 @@ namespace ControleGastos.API.Migrations
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("PessoaId")
                         .HasColumnType("uuid");

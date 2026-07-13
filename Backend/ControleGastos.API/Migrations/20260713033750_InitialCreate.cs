@@ -16,7 +16,7 @@ namespace ControleGastos.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Nome = table.Column<string>(type: "character varying(80)", maxLength: 80, nullable: false),
+                    Nome = table.Column<string>(type: "text", nullable: false),
                     Idade = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -29,7 +29,7 @@ namespace ControleGastos.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Descricao = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
+                    Descricao = table.Column<string>(type: "text", nullable: false),
                     Valor = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
                     Tipo = table.Column<string>(type: "text", nullable: false),
                     PessoaId = table.Column<Guid>(type: "uuid", nullable: false)
