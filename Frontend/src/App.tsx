@@ -1,12 +1,7 @@
-import AppRoutes from './routes'
+import { RouterProvider } from "react-router-dom";
 
-function App() {
+import { router } from "./routes";
 
-  return (
-
-    <AppRoutes /> 
-
-  )
+export default function App() {
+  return <RouterProvider router={router} />;
 }
-
-export default App

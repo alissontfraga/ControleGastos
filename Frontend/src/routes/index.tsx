@@ -1,42 +1,48 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 
 import Layout from "../components/Layout";
 
-import Pessoas from "../pages/Pessoas"
+import Dashboard from "../pages/Dashboard";
+
+import Pessoas from "../pages/Pessoas";
+
 import Transacoes from "../pages/Transacoes";
-import Relatorios from "../pages/Relatorios";
 
+/*
+ * Configuração principal das rotas da aplicação.
+ *
+ * O Layout funciona como estrutura base contendo:
+ * - Navbar;
+ * - Sidebar;
+ * - Área onde as páginas são renderizadas através do Outlet.
+ */
+export const router = createBrowserRouter([
+  {
+    path: "/",
 
-export default function AppRoutes() {
+    element: <Layout />,
 
-    return (
+    children: [
+      {
+        // Página inicial com o resumo financeiro.
+        path: "/",
 
-        <BrowserRouter>
+        element: <Dashboard />,
+      },
 
-            <Routes>
+      {
+        // Gerenciamento de pessoas cadastradas.
+        path: "/pessoas",
 
-                <Route element={<Layout />}>
+        element: <Pessoas />,
+      },
 
-                    <Route 
-                        path="/" 
-                        element={<Pessoas />} 
-                    />
+      {
+        // Gerenciamento das receitas e despesas.
+        path: "/transacoes",
 
-                    <Route
-                        path="/transacoes"
-                        element={<Transacoes />}
-                    />
-
-                    <Route
-                        path="/relatorios"
-                        element={<Relatorios />}
-                    />
-
-                </Route>
-
-            </Routes>
-
-        </BrowserRouter>
-
-    );
-}
+        element: <Transacoes />,
+      },
+    ],
+  },
+]);
