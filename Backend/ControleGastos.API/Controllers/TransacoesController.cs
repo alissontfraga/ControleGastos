@@ -8,10 +8,10 @@ namespace ControleGastos.API.Controllers
     [Route("api/[controller]")]
     public class TransacoesController(ITransacaoService transacaoService) : ControllerBase
     {
- 
-    //    Endpoint responsável por criar uma nova transação.
-    //    Valida se a pessoa existe e aplica regras de negócio,
-    //    como impedir receitas para menores de idade.
+
+        //    Endpoint responsável por criar uma nova transação.
+        //    Valida se a pessoa existe e aplica regras de negócio,
+        //    como impedir receitas para menores de idade.
         [HttpPost]
         [ProducesResponseType(typeof(TransacaoResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -58,7 +58,7 @@ namespace ControleGastos.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Remover(Guid id)
         {
-        
+
             await transacaoService.RemoverAsync(id);
 
             return NoContent();

@@ -53,9 +53,9 @@ namespace ControleGastos.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Remover(Guid id)
         {
-           
-           await pessoaService.RemoverAsync(id); 
-           
+
+            await pessoaService.RemoverAsync(id);
+
             return NoContent();
         }
 
