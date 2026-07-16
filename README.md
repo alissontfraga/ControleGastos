@@ -290,14 +290,15 @@ cd ControleGastos
 cd Backend
 ```
 
-## 3. Crie um arquivo .env dentro da pasta Backend: 
+---
 
-```
+## 3. Crie um arquivo `.env` dentro da pasta `Backend`
+
+```env
 POSTGRES_DB=controlegastos
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 ```
-
 
 ---
 
@@ -309,7 +310,21 @@ docker compose up -d
 
 ---
 
-## 5. Execute as migrations
+## 5. Instale a ferramenta do Entity Framework (caso ainda não possua)
+
+```bash
+dotnet tool install --global dotnet-ef
+```
+
+Caso já possua a ferramenta instalada, pode verificar a versão com:
+
+```bash
+dotnet ef --version
+```
+
+---
+
+## 6. Execute as migrations
 
 ```bash
 cd backend/ControleGastos.API
@@ -318,7 +333,7 @@ dotnet ef database update
 
 ---
 
-## 6. Execute o backend
+## 7. Execute o backend
 
 ```bash
 dotnet run
